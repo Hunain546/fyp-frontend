@@ -26,7 +26,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
             Your personalized learning companion for O/A Level success.
           </p>
           <img
-            src="src/data/undraw_learning_re_32qv.svg" // Replace with an engaging illustration
+            src="/undraw_learning_re_32qv.svg" // Replace with an engaging illustration
             alt="Learning illustration"
             className="w-3/4 max-w-md rounded-lg"
           />
