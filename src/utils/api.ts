@@ -20,11 +20,14 @@ export const fetchAssistantResponse = async (
       : "/answer_default"; // default endpoint if subject doesn't match
 
   // Make the POST request
-  const response = await fetch(`http://localhost:8000${endpoint}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user_query: message, mode: pastpapermode }),
-  });
+  const response = await fetch(
+    `https://f72bb0a5-4629-404d-b8d2-a0647a699b54-00-201fwkudwmvrn.pike.replit.dev:8000${endpoint}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ user_query: message, mode: pastpapermode }),
+    }
+  );
 
   if (!response.ok) throw new Error("Failed to fetch answer");
 
