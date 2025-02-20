@@ -26,7 +26,6 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
   const [imageDescription, setImageDescription] = useState<string | null>(null);
   const [imageName, setImageName] = useState("Choose Image");
   const [isImageError, setIsImageError] = useState<boolean>(false);
-  const [answer, setAnswer] = useState<string>("");
   const answerRef = useRef<HTMLDivElement>(null);
 
   // Add this useEffect to clear inputs when tab changes
@@ -78,7 +77,6 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
           examinerReport: response.examiner_report,
           source: response.paper_source?.source || "Unknown source",
         });
-        setAnswer(response.answer);
         // console.log(answer);
         // console.log("testing");
       }

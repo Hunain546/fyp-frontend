@@ -11,8 +11,13 @@ export const fetchAssistantResponse = async (
 }> => {
   // Determine the endpoint based on the subject and mode
   const endpoint =
-    subject === "Islamiat" ? "/answer_islamiat" : "/answer_history";
-  console.log(pastpapermode);
+    subject === "Islamiat"
+      ? "/answer_islamiat"
+      : subject === "History"
+      ? "/answer_history"
+      : subject === "Geography"
+      ? "/answer_geography"
+      : "/answer_default"; // default endpoint if subject doesn't match
 
   // Make the POST request
   const response = await fetch(`http://localhost:8000${endpoint}`, {
@@ -33,7 +38,11 @@ export const fetchQuizQuestions = async (
   difficulty: string
 ): Promise<{ quiz: string }> => {
   const normalizedSubject = subject.toLowerCase(); // Convert to lowercase
-  console.log("Sending request to /generate_quiz:", { normalizedSubject, topic, difficulty });
+  console.log("Sending request to /generate_quiz:", {
+    normalizedSubject,
+    topic,
+    difficulty,
+  });
 
   const response = await fetch("http://localhost:8000/generate_quiz", {
     method: "POST",
@@ -53,4 +62,3 @@ export const fetchQuizQuestions = async (
 
   return response.json();
 };
-
