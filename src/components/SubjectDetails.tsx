@@ -97,7 +97,7 @@ const AskAI = ({
         <FeatureCard
           title="Ask AI"
           description="Chat with our AI assistant for personalized insights."
-          videoSrc="src/data/askai.mp4"
+          videoSrc="/askai.mp4"
           onNavigate={onNavigate}
           icon={Book}
           section="chat"
@@ -111,7 +111,7 @@ const AskAI = ({
         <FeatureCard
           title="Past Paper Assistant"
           description="Generate exam-grade answers with AI-enabled precision."
-          videoSrc="src/data/askai.mp4"
+          videoSrc="/askai.mp4"
           onNavigate={onNavigate}
           icon={Search}
           section="pastpapers"
@@ -121,7 +121,7 @@ const AskAI = ({
         <FeatureCard
           title="AI-Powered Quizzes"
           description="Challenge yourself with adaptive quizzes."
-          videoSrc="src/data/askai.mp4"
+          videoSrc="/askai.mp4"
           onNavigate={onNavigate}
           icon={FileQuestion}
           section="quizzes"
@@ -135,7 +135,7 @@ const AskAI = ({
         <FeatureCard
           title="Topic Explorer"
           description="Dive deep into topics with AI guided insights."
-          videoSrc="src/data/askai.mp4"
+          videoSrc="/askai.mp4"
           onNavigate={onNavigate}
           icon={List}
           section="topics"
