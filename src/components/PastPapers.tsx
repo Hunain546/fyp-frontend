@@ -26,6 +26,7 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
   const [imageDescription, setImageDescription] = useState<string | null>(null);
   const [imageName, setImageName] = useState("Choose Image");
   const [isImageError, setIsImageError] = useState<boolean>(false);
+  const [answer, setAnswer] = useState<string>("");
   const answerRef = useRef<HTMLDivElement>(null);
 
   // Add this useEffect to clear inputs when tab changes
@@ -77,6 +78,9 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
           examinerReport: response.examiner_report,
           source: response.paper_source?.source || "Unknown source",
         });
+        setAnswer(response.answer);
+        // console.log(answer);
+        // console.log("testing");
       }
     } catch (error) {
       console.error("Error fetching response:", error);
@@ -102,6 +106,10 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
       if (imagePreview) URL.revokeObjectURL(imagePreview);
     };
   }, [generatedAnswer, imagePreview]);
+
+  const isAnswerValid = (ans: string): boolean => {
+    return ans.trim().split(/\s+/).length >= 20;
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-8 min-h-screen flex flex-col items-center bg-gradient-to-r from-gray-100 to-gray-50 text-gray-900 font-sans">
@@ -224,41 +232,49 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
         )}
 
         {generatedAnswer && (
-          <div
-            ref={answerRef}
-            className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-6 space-y-4 border border-gray-200"
-          >
-            <h2 className="text-xl font-bold text-center">
-              📝 Generated Answer
-            </h2>
-            <p className="bg-gray-100 p-4 rounded-md text-lg">
-              {generatedAnswer.answer}
-            </p>
-            <details className="border-t pt-2">
-              <summary className="font-medium cursor-pointer hover:text-blue-500 text-lg">
-                📌 Marking Scheme
-              </summary>
-              <p className="text-gray-600 mt-2 p-3 bg-gray-100 rounded-md text-lg">
-                {generatedAnswer.markingScheme}
+          <>
+            {!isAnswerValid(generatedAnswer.answer) ? (
+              <p className="bg-red-100 p-4 rounded-md text-lg text-red-600">
+                {generatedAnswer.answer}
               </p>
-            </details>
-            <details className="border-t pt-2">
-              <summary className="font-medium cursor-pointer hover:text-blue-500 text-lg">
-                📋 Examiner Report
-              </summary>
-              <p className="text-gray-600 mt-2 p-3 bg-gray-100 rounded-md text-lg">
-                {generatedAnswer.examinerReport}
-              </p>
-            </details>
-            <details className="border-t pt-2">
-              <summary className="font-medium cursor-pointer hover:text-blue-500 text-lg">
-                📖 Question Source
-              </summary>
-              <p className="text-gray-600 mt-2 p-3 bg-gray-100 rounded-md text-lg">
-                {generatedAnswer.source}
-              </p>
-            </details>
-          </div>
+            ) : (
+              <div
+                ref={answerRef}
+                className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6 mt-6 space-y-4 border border-gray-200"
+              >
+                <h2 className="text-xl font-bold text-center">
+                  📝 Generated Answer
+                </h2>
+                <p className="bg-gray-100 p-4 rounded-md text-lg">
+                  {generatedAnswer.answer}
+                </p>
+                <details className="border-t pt-2">
+                  <summary className="font-medium cursor-pointer hover:text-blue-500 text-lg">
+                    📌 Marking Scheme
+                  </summary>
+                  <p className="text-gray-600 mt-2 p-3 bg-gray-100 rounded-md text-lg">
+                    {generatedAnswer.markingScheme}
+                  </p>
+                </details>
+                <details className="border-t pt-2">
+                  <summary className="font-medium cursor-pointer hover:text-blue-500 text-lg">
+                    📋 Examiner Report
+                  </summary>
+                  <p className="text-gray-600 mt-2 p-3 bg-gray-100 rounded-md text-lg">
+                    {generatedAnswer.examinerReport}
+                  </p>
+                </details>
+                <details className="border-t pt-2">
+                  <summary className="font-medium cursor-pointer hover:text-blue-500 text-lg">
+                    📖 Question Source
+                  </summary>
+                  <p className="text-gray-600 mt-2 p-3 bg-gray-100 rounded-md text-lg">
+                    {generatedAnswer.source}
+                  </p>
+                </details>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
