@@ -1,0 +1,5 @@
+{/* Glow Effect */}
+      <span className="absolute inset-0 rounded-xl border-2 border-transparent hover:border-white/30 transition-all duration-300"></span>
+      <span className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 bg-gradient-to-r from-white/10 via-white/20 to-white/10 blur-lg"></span>
+
+      

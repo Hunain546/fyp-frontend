@@ -1,0 +1,107 @@
+import React, { useState, useRef, useEffect } from "react";
+import { Send, Sparkles, BookOpen, Clock } from "lucide-react";
+import { Message } from "../types";
+
+interface ChatProps {
+  subject: string;
+  messages: Message[];
+  onSendMessage: (message: string) => void;
+}
+
+const Chat: React.FC<ChatProps> = ({ subject, messages, onSendMessage }) => {
+  const [message, setMessage] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (message.trim()) {
+      onSendMessage(message);
+      setMessage("");
+    }
+  };
+
+  const formatTime = (timestamp: number) => {
+    return new Date(timestamp).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  return (
+    <div className="flex flex-col h-full">
+      <div className="bg-indigo-50 p-4 rounded-t-2xl border-b">
+        <div className="flex items-center gap-2 text-indigo-900">
+          <BookOpen className="w-5 h-5" />
+          <span className="font-medium">{subject} Past Paper Assistant</span>
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto p-6">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`flex items-start gap-4 mb-6 ${
+              msg.type === "user" ? "flex-row-reverse" : ""
+            }`}
+          >
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                msg.type === "user"
+                  ? "bg-indigo-100 text-indigo-600"
+                  : "bg-indigo-600 text-white"
+              }`}
+            >
+              {msg.type === "user" ? "U" : <Sparkles className="w-4 h-4" />}
+            </div>
+            <div className="flex flex-col max-w-[70%]">
+              <div
+                className={`p-4 rounded-2xl ${
+                  msg.type === "user"
+                    ? "bg-indigo-600 text-white rounded-tr-none"
+                    : "bg-gray-100 text-gray-800 rounded-tl-none"
+                } whitespace-pre-wrap`}
+              >
+                {msg.content}
+              </div>
+              <div
+                className={`flex items-center gap-1 mt-1 text-xs text-gray-500 ${
+                  msg.type === "user" ? "justify-end" : ""
+                }`}
+              >
+                <Clock className="w-3 h-3" />
+                {formatTime(msg.timestamp)}
+              </div>
+            </div>
+          </div>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+      <form onSubmit={handleSubmit} className="border-t p-4">
+        <div className="flex gap-4 max-w-4xl mx-auto">
+          <input
+            type="text"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder={`Ask any ${subject} past paper question...`}
+            className="flex-1 p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+          <button
+            type="submit"
+            className="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 transition-colors"
+          >
+            <Send className="w-5 h-5" />
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default Chat;
