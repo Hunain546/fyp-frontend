@@ -163,6 +163,17 @@ function App() {
     }
   };
 
+  // Add clear chat handler: clears messages for selected subject.
+  const handleClearChat = () => {
+    if (!selectedSubject) return;
+    const newHistory = subjectHistory.map((h) =>
+      h.subject === selectedSubject ? { ...h, messages: [] } : h
+    );
+    localStorage.setItem("subjectHistory", JSON.stringify(newHistory));
+    // Force UI update; adjust if you later expose a setter in context.
+    window.location.reload();
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case "dashboard":
@@ -190,6 +201,7 @@ function App() {
               messages={getCurrentMessages()}
               onSendMessage={handleSendMessage}
               onCloseChat={() => setActiveSection("subjectPage")}
+              onClearChat={handleClearChat} // Added onClearChat prop here
             />
           )
         );

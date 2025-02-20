@@ -20,6 +20,7 @@ interface ChatProps {
   messages: Message[];
   onSendMessage: (message: string, pastpapermode: boolean) => void; // Updated
   onCloseChat: () => void;
+  onClearChat: () => void; // New prop to clear chat messages
 }
 
 const Chat: React.FC<ChatProps> = ({
@@ -27,6 +28,7 @@ const Chat: React.FC<ChatProps> = ({
   messages,
   onSendMessage,
   onCloseChat,
+  onClearChat, // Destructure the new prop
 }) => {
   const [message, setMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -133,8 +135,8 @@ const Chat: React.FC<ChatProps> = ({
   };
 
   const handleClearChat = () => {
-    // Clears chat by reloading the page; adjust as needed for your app architecture
-    window.location.reload();
+    // Call parent's clear chat handler
+    onClearChat();
   };
 
   return (
