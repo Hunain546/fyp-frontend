@@ -9,6 +9,7 @@ import {
   Plus,
   Menu,
   Search,
+  Trash, // New import for Trash icon
 } from "lucide-react"; // Added Plus, Menu, Search
 import { Message } from "../types";
 import jsPDF from "jspdf";
@@ -131,6 +132,11 @@ const Chat: React.FC<ChatProps> = ({
     doc.save(`${subject}_chat_history.pdf`);
   };
 
+  const handleClearChat = () => {
+    // Clears chat by reloading the page; adjust as needed for your app architecture
+    window.location.reload();
+  };
+
   return (
     <div
       className={`fixed inset-0 z-50 flex ${
@@ -206,7 +212,7 @@ const Chat: React.FC<ChatProps> = ({
             </button>
             <button
               onClick={onCloseChat}
-              className="px-4 py-2 text-sm bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+              className="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700"
             >
               Back
             </button>
@@ -310,18 +316,13 @@ const Chat: React.FC<ChatProps> = ({
             >
               <Send />
             </button>
-
-            {/* Toggle Button for pastpapermode */}
-            {/* <button
-              onClick={() => setPastpapermode(!pastpapermode)}
-              className={`px-4 py-2 rounded-full border transition ${
-                pastpapermode
-                  ? "bg-indigo-600 text-white"
-                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-              }`}
+            <button
+              onClick={handleClearChat}
+              className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition"
+              title="Clear Chat"
             >
-              Pastpaper
-            </button> */}
+              <Trash className="w-5 h-5" />
+            </button>
           </div>
         </footer>
 
