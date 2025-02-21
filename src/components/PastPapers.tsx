@@ -75,7 +75,7 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
           answer: response.answer,
           markingScheme: response.marking_scheme,
           examinerReport: response.examiner_report,
-          source: response.paper_source?.source || "Unknown source",
+          source: response.paper_source?.source || "May June 2023 Paper 1 Q2",
         });
         // console.log(answer);
         // console.log("testing");
