@@ -35,7 +35,7 @@ const HeroSection = () => {
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
           <button className="px-8 py-4 bg-white text-indigo-900 font-display font-bold rounded-xl border-2 border-indigo-100 hover:border-indigo-200 hover:bg-indigo-50 transition-colors">
-            Buy Now
+            Learn More
           </button>
         </div>
 

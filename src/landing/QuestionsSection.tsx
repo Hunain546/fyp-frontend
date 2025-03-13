@@ -18,7 +18,7 @@ export function QuestionsSection() {
               the fence and need extra support - book a free consultation with
               our team. We're here to help you succeed.
             </p>
-            <button className="bg-purple-300 hover:bg-purple-400 text-purple-900 px-6 py-2 rounded-md transition-colors">
+            <button className="bg-purple-100 hover:bg-purple-400 text-purple-900 px-6 py-2 rounded-md transition-colors font-medium">
               Contact Us
             </button>
           </div>

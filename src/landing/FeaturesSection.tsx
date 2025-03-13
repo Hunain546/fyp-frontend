@@ -39,7 +39,7 @@ const FeaturesSection = () => {
             </div>
             <div className="bg-gray-50 rounded-lg overflow-hidden">
               <video autoPlay loop muted className="w-full h-48 object-cover">
-                <source src="/public/quizes.mp4" type="video/mp4" />
+                <source src="/askai.mp4" type="video/mp4" />
               </video>
             </div>
           </div>
@@ -62,7 +62,7 @@ const FeaturesSection = () => {
             </div>
             <div className="bg-gray-50 rounded-lg overflow-hidden">
               <video autoPlay loop muted className="w-full h-48 object-cover">
-                <source src="/public/quizes.mp4" type="video/mp4" />
+                <source src="/pastpaper.mp4" type="video/mp4" />
               </video>
             </div>
           </div>
@@ -85,7 +85,7 @@ const FeaturesSection = () => {
             </div>
             <div className="bg-gray-50 rounded-lg overflow-hidden">
               <video autoPlay loop muted className="w-full h-48 object-cover">
-                <source src="/public/quizes.mp4" type="video/mp4" />
+                <source src="/quizes.mp4" type="video/mp4" />
               </video>
             </div>
           </div>
@@ -108,7 +108,7 @@ const FeaturesSection = () => {
             </div>
             <div className="bg-gray-50 rounded-lg overflow-hidden">
               <video autoPlay loop muted className="w-full h-48 object-cover">
-                <source src="/public/quizes.mp4" type="video/mp4" />
+                <source src="/pastpaper.mp4" type="video/mp4" />
               </video>
             </div>
           </div>
