@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ["Poppins", "system-ui", "sans-serif"],
+        display: ["Inter Tight", "system-ui", "sans-serif"],
       },
       colors: {
         primary: "#4F46E5",

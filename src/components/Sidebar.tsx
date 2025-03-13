@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Brain,
   History,
@@ -10,7 +10,9 @@ import {
   ChevronRight,
   ChevronLeft,
   Edit3,
+  User,
 } from "lucide-react";
+import { getUser } from "../auth";
 
 interface SidebarProps {
   activeSection: string;
@@ -24,6 +26,23 @@ const Sidebar: React.FC<SidebarProps> = ({
   selectedSubject,
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const generalMenuItems = [
     { icon: Home, label: "Dashboard", id: "dashboard" },
@@ -42,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     <div
       className={`h-screen ${
         isExpanded ? "w-64 sticky top-0 overflow-y-auto" : "w-20"
-      } bg-indigo-900 text-white p-4 sticky top-0 overflow-y-auto transition-all duration-300 ease-in-out`}
+      } bg-indigo-900 text-white p-4 sticky top-0 overflow-y-auto transition-all duration-300 ease-in-out flex flex-col`}
     >
       {/* Toggle Button */}
       <button
@@ -56,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div
         className={`flex items-center ${
           isExpanded ? "gap-3" : "justify-center"
-        } mb-10`}
+        } mb-6`}
       >
         <Brain className="w-8 h-8" />
         {isExpanded && (
@@ -69,6 +88,56 @@ const Sidebar: React.FC<SidebarProps> = ({
             </span>
             <span className="text-white">dapt</span>
           </h1>
+        )}
+      </div>
+
+      {/* User Profile */}
+      <div className={`mb-6 ${!isExpanded && "flex justify-center"}`}>
+        {loading ? (
+          <div className="flex items-center justify-center h-12">
+            <div className="animate-pulse bg-indigo-800/50 rounded-full h-8 w-8"></div>
+          </div>
+        ) : user ? (
+          <div
+            className={`flex items-center ${
+              isExpanded ? "gap-3" : "justify-center"
+            }`}
+          >
+            <div className="bg-indigo-800/80 rounded-full p-1 flex items-center justify-center">
+              {user.user_metadata?.avatar_url ? (
+                <img
+                  src={user.user_metadata.avatar_url}
+                  alt="User avatar"
+                  className="rounded-full h-10 w-10 object-cover"
+                />
+              ) : (
+                <User className="h-8 w-8 text-white/80" />
+              )}
+            </div>
+            {isExpanded && (
+              <div className="flex flex-col">
+                <span className="font-medium text-sm">
+                  {user.user_metadata?.first_name ||
+                    user.user_metadata?.name ||
+                    "User"}
+                </span>
+                <span className="text-xs text-white/60 truncate w-36">
+                  {user.email}
+                </span>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div
+            className={`flex items-center ${
+              isExpanded ? "gap-3" : "justify-center"
+            }`}
+          >
+            <div className="bg-indigo-800/80 rounded-full p-1">
+              <User className="h-8 w-8 text-white/80" />
+            </div>
+            {isExpanded && <span className="text-sm">Guest User</span>}
+          </div>
         )}
       </div>
 

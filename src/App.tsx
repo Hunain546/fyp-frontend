@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Atom,
   FlaskRound,
@@ -14,6 +14,7 @@ import PracticeMode from "./components/PracticeMode";
 import Settings from "./components/Settings";
 import Progress from "./components/Progress";
 import Login from "./components/Login";
+import Signup from "./components/Signup"; // Add this import
 import SubjectDetails from "./components/SubjectDetails";
 import { Quizzes } from "./components/quizes";
 import { Message } from "./types";
@@ -21,16 +22,38 @@ import { fetchAssistantResponse } from "./utils/api";
 import { useSubject } from "./context/SubjectContext";
 import PastPaperAI from "./components/PastPapers";
 import FeedbackPage from "./components/Feedback";
-import PastPaperAssistant from "./components/PastPapers2";
+import { signUp, signIn, getUser, signOut } from "./auth";
+import HomePage from "./landing/HomePage"; // Import HomePage component
 
 function App() {
   // State variables
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState("dashboard");
+  const [showSignup, setShowSignup] = useState(false); // Add this state
+  const [showAuth, setShowAuth] = useState(false); // Track if user wants to auth
 
   // Use subject context
   const { selectedSubject, setSelectedSubject, subjectHistory, updateHistory } =
     useSubject();
+
+  // Check for existing session when the app loads
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const user = await getUser();
+        if (user) {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const handleSelectSubject = (subject: string) => {
     setSelectedSubject(subject); // Keep the subject selected
@@ -155,12 +178,71 @@ function App() {
   };
 
   // Login handler
-  const handleLogin = (email: string, password: string) => {
-    if (email === "hunainamir00@gmail.com" && password === "password") {
-      setIsAuthenticated(true);
-    } else {
-      alert("Invalid login credentials.");
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      const { user, error } = await signIn(email, password);
+
+      if (error) {
+        throw new Error(`Login failed: ${error.message}`);
+      }
+
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        alert("Login failed. Please check your credentials.");
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      alert(error.message || "Login failed. Please try again.");
     }
+  };
+
+  // Signup handler
+  const handleSignup = async (
+    name: string,
+    email: string,
+    password: string
+  ) => {
+    try {
+      const { user, error } = await signUp(email, password, name);
+
+      if (error) {
+        throw new Error(`Signup failed: ${error.message}`);
+      }
+
+      if (user) {
+        console.log("User registered successfully:", user);
+        // Don't authenticate directly
+        // setIsAuthenticated(true);
+        return { success: true };
+      }
+    } catch (error: any) {
+      console.error("Signup error:", error);
+      // Re-throw the error so the Signup component can handle it
+      throw error;
+    }
+  };
+
+  // Toggle between login and signup screens
+  const toggleAuthScreen = () => {
+    setShowSignup(!showSignup);
+  };
+
+  // Handle navigation to login screen from Homepage
+  const handleShowLogin = () => {
+    setShowAuth(true);
+    setShowSignup(false);
+  };
+
+  // Handle navigation to signup screen from Homepage
+  const handleShowSignup = () => {
+    setShowAuth(true);
+    setShowSignup(true);
+  };
+
+  // Handle cancel authentication and return to homepage
+  const handleCancelAuth = () => {
+    setShowAuth(false);
   };
 
   // Add clear chat handler: clears messages for selected subject.
@@ -174,6 +256,19 @@ function App() {
     window.location.reload();
   };
 
+  // Sign out handler
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      setIsAuthenticated(false);
+      setSelectedSubject(null);
+      setActiveSection("dashboard");
+    } catch (error) {
+      console.error("Sign out error:", error);
+      alert("Failed to sign out. Please try again.");
+    }
+  };
+
   const renderContent = () => {
     switch (activeSection) {
       case "dashboard":
@@ -181,6 +276,7 @@ function App() {
           <Dashboard
             subjects={subjects}
             onSubjectSelect={handleSelectSubject}
+            onSignOut={handleSignOut}
           />
         );
       case "subjectPage":
@@ -248,8 +344,37 @@ function App() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-700">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
+    // Show login/signup only if the user has clicked on auth buttons
+    if (showAuth) {
+      return showSignup ? (
+        <Signup
+          onSignup={handleSignup}
+          onLoginClick={toggleAuthScreen}
+          onCancel={handleCancelAuth}
+        />
+      ) : (
+        <Login
+          onLogin={handleLogin}
+          onSignupClick={toggleAuthScreen}
+          onCancel={handleCancelAuth}
+        />
+      );
+    }
+
+    // Otherwise show the homepage
+    return <HomePage onLogin={handleShowLogin} onSignup={handleShowSignup} />;
   }
 
   return (

@@ -9,9 +9,14 @@ interface Subject {
 interface DashboardProps {
   subjects: Subject[];
   onSubjectSelect: (subject: string) => void;
+  onSignOut?: () => void; // Optional prop for handling sign out
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ subjects, onSubjectSelect }) => {
+const Dashboard: React.FC<DashboardProps> = ({
+  subjects,
+  onSubjectSelect,
+  onSignOut,
+}) => {
   const examDate = new Date("2025-06-01T00:00:00"); // Set the next exam date here
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
 
@@ -34,7 +39,31 @@ const Dashboard: React.FC<DashboardProps> = ({ subjects, onSubjectSelect }) => {
   }, []);
 
   return (
-    <>
+    <div className="relative">
+      {/* Sign Out Button */}
+      <div className="absolute top-0 right-0">
+        <button
+          onClick={onSignOut}
+          className="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors duration-200 flex items-center gap-1"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+            />
+          </svg>
+          Sign Out
+        </button>
+      </div>
+
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold text-gray-900">
           Welcome to <span className="text-indigo-600">O/Adapt</span>
@@ -86,7 +115,7 @@ const Dashboard: React.FC<DashboardProps> = ({ subjects, onSubjectSelect }) => {
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
