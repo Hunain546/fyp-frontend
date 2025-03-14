@@ -122,11 +122,19 @@ const StatsFeatures = () => {
           <p className="text-sm text-gray-500 mb-4 font-display">
             TRUSTED BY TOP INSTITUTIONS
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <div
+          <div className="flex flex-wrap justify-center items-center gap-14">
+            {[
+              "/logo1.png",
+              "/logo2.png",
+              "/logo3.png",
+              "/logo4.png",
+              "/logo5.png",
+            ].map((logo, i) => (
+              <img
                 key={i}
-                className="w-32 h-12 bg-gray-200 rounded-lg animate-pulse"
+                src={logo}
+                alt={`Logo ${i + 1}`}
+                className="w-42 h-14 object-contain animate-pulse"
               />
             ))}
           </div>
