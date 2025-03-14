@@ -3,9 +3,14 @@ import React, { useState, useRef, useEffect } from "react";
 interface NavbarProps {
   onLogin: () => void;
   onSignup: () => void;
+  onSubjectSelect?: (subject: string) => void; // Add this prop
 }
 
-const Navbar: React.FC<NavbarProps> = ({ onLogin, onSignup }) => {
+const Navbar: React.FC<NavbarProps> = ({
+  onLogin,
+  onSignup,
+  onSubjectSelect,
+}) => {
   const [subjectsDropdownOpen, setSubjectsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -23,6 +28,14 @@ const Navbar: React.FC<NavbarProps> = ({ onLogin, onSignup }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Handle subject selection
+  const handleSubjectClick = (subject: string) => {
+    if (onSubjectSelect) {
+      onSubjectSelect(subject);
+    }
+    setSubjectsDropdownOpen(false);
+  };
 
   return (
     <nav className="bg-indigo-900 bg-opacity-95 px-8 py-3 flex justify-between items-center shadow-lg backdrop-blur-sm sticky top-0 z-50">
@@ -73,19 +86,31 @@ const Navbar: React.FC<NavbarProps> = ({ onLogin, onSignup }) => {
           {subjectsDropdownOpen && (
             <div className="absolute mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-10">
               <a
-                href="/subjects/islamiat"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubjectClick("Islamiat");
+                }}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100 hover:text-indigo-900"
               >
                 Islamiat
               </a>
               <a
-                href="/subjects/history"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubjectClick("History");
+                }}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100 hover:text-indigo-900"
               >
                 History
               </a>
               <a
-                href="/subjects/geography"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleSubjectClick("Geography");
+                }}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-100 hover:text-indigo-900"
               >
                 Geography
@@ -95,13 +120,13 @@ const Navbar: React.FC<NavbarProps> = ({ onLogin, onSignup }) => {
         </div>
 
         <a
-          href="/pricing"
+          href="#"
           className="hover:text-pink-400 transition-colors duration-300 border-b-2 border-transparent hover:border-pink-400"
         >
           Pricing
         </a>
         <a
-          href="/blogs"
+          href="#"
           className="hover:text-pink-400 transition-colors duration-300 border-b-2 border-transparent hover:border-pink-400"
         >
           Blogs
