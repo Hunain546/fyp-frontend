@@ -67,7 +67,7 @@ const CourseSection: React.FC = () => {
         className="w-full md:w-1/2 mb-10 md:mb-0"
       >
         <img
-          src="/public/geography1.png"
+          src="/geography1.png"
           alt="Geography AI assistant preview"
           className="w-full rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300"
         />
