@@ -62,3 +62,19 @@ export const fetchQuizQuestions = async (
 
   return response.json();
 };
+
+// ✅ ADD THIS FUNCTION FOR FETCHING TOPICS
+export const fetchTopics = async (subject: string) => {
+  try {
+    const response = await fetch(`http://localhost:8000/topics/${subject}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch topics");
+    }
+    const data = await response.json();
+    console.log("Fetched Topics:", data.topics); // Debugging log
+    return data.topics; // Return the list of topics
+  } catch (error) {
+    console.error("Error fetching topics:", error);
+    return [];
+  }
+};

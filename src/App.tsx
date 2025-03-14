@@ -24,6 +24,7 @@ import PastPaperAI from "./components/PastPapers";
 import FeedbackPage from "./components/Feedback";
 import { signUp, signIn, getUser, signOut } from "./auth";
 import HomePage from "./landing/HomePage"; // Import HomePage component
+import TopicExplorer from "./components/topic";
 
 function App() {
   // State variables
@@ -313,7 +314,7 @@ function App() {
           )
         );
       case "topics":
-        return <div>Topic Explorer Page (To Be Implemented)</div>;
+        return selectedSubject && <TopicExplorer subject={selectedSubject} />; // Pass subject
       case "pastpapers":
         return (
           selectedSubject && (
