@@ -11,6 +11,7 @@ import Footer from "./Footer";
 import IslamiatPage from "../components/IslamiatPage";
 import HistoryPage from "../components/HistoryPage";
 import GeographyPage from "../components/GeographyPage";
+import Pricing from "./Pricing";
 
 interface HomePageProps {
   onLogin: () => void;
@@ -19,26 +20,57 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ onLogin, onSignup }) => {
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+  const [showPricing, setShowPricing] = useState<boolean>(false);
 
   const handleSubjectSelect = (subject: string) => {
     setSelectedSubject(subject);
+    setShowPricing(false);
   };
 
   const handleBackToHome = () => {
     setSelectedSubject(null);
+    setShowPricing(false);
+  };
+
+  const handlePricingSelect = () => {
+    setSelectedSubject(null);
+    setShowPricing(true);
   };
 
   // Render specific subject page based on selection
   if (selectedSubject === "Islamiat") {
-    return <IslamiatPage onBack={handleBackToHome} />;
+    return (
+      <IslamiatPage
+        onBack={handleBackToHome}
+        onLogin={onLogin}
+        onSignup={onSignup}
+      />
+    );
   }
 
   if (selectedSubject === "History") {
-    return <HistoryPage onBack={handleBackToHome} />;
+    return (
+      <HistoryPage
+        onBack={handleBackToHome}
+        onLogin={onLogin}
+        onSignup={onSignup}
+      />
+    );
   }
 
   if (selectedSubject === "Geography") {
-    return <GeographyPage onBack={handleBackToHome} />;
+    return (
+      <GeographyPage
+        onBack={handleBackToHome}
+        onLogin={onLogin}
+        onSignup={onSignup}
+      />
+    );
+  }
+
+  // Render pricing page if selected
+  if (showPricing) {
+    return <Pricing />;
   }
 
   return (
@@ -47,6 +79,7 @@ const HomePage: React.FC<HomePageProps> = ({ onLogin, onSignup }) => {
         onLogin={onLogin}
         onSignup={onSignup}
         onSubjectSelect={handleSubjectSelect}
+        onPricingSelect={handlePricingSelect}
       />
       <HeroSection />
       <StatsFeatures />

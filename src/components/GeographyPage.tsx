@@ -238,12 +238,22 @@ const FeaturesSection: React.FC = () => {
 // Geography Page Component
 interface GeographyPageProps {
   onBack: () => void;
+  onLogin?: () => void;
+  onSignup?: () => void;
 }
 
-const GeographyPage: React.FC<GeographyPageProps> = ({ onBack }) => {
+const GeographyPage: React.FC<GeographyPageProps> = ({
+  onBack,
+  onLogin,
+  onSignup,
+}) => {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+      <Navbar
+        onLogin={onLogin || (() => {})}
+        onSignup={onSignup || (() => {})}
+        onSubjectSelect={(subject) => {}}
+      />
       <HeroSection onBack={onBack} />
       <CourseSection />
       <VideoLessonSection />

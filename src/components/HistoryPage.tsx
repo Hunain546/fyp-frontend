@@ -239,12 +239,18 @@ const FeaturesSection: React.FC = () => {
 // History Page Component
 interface HistoryPageProps {
   onBack: () => void;
+  onLogin?: () => void;
+  onSignup?: () => void;
 }
 
-const HistoryPage: React.FC<HistoryPageProps> = ({ onBack }) => {
+const HistoryPage: React.FC<HistoryPageProps> = ({ onBack, onLogin, onSignup }) => {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+      <Navbar 
+        onLogin={onLogin || (() => {})} 
+        onSignup={onSignup || (() => {})} 
+        onSubjectSelect={(subject) => {}} 
+      />
       <HeroSection onBack={onBack} />
       <CourseSection />
       <VideoLessonSection />

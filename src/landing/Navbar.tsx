@@ -3,13 +3,15 @@ import React, { useState, useRef, useEffect } from "react";
 interface NavbarProps {
   onLogin: () => void;
   onSignup: () => void;
-  onSubjectSelect?: (subject: string) => void; // Add this prop
+  onSubjectSelect?: (subject: string) => void;
+  onPricingSelect?: () => void; // Add this prop
 }
 
 const Navbar: React.FC<NavbarProps> = ({
   onLogin,
   onSignup,
   onSubjectSelect,
+  onPricingSelect,
 }) => {
   const [subjectsDropdownOpen, setSubjectsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -76,7 +78,7 @@ const Navbar: React.FC<NavbarProps> = ({
             >
               <path
                 fillRule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 111.414 1.414l-4 4a1 1 01-1.414 0l-4-4a1 1 0 010-1.414z"
                 clipRule="evenodd"
               />
             </svg>
@@ -121,6 +123,10 @@ const Navbar: React.FC<NavbarProps> = ({
 
         <a
           href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            if (onPricingSelect) onPricingSelect();
+          }}
           className="hover:text-pink-400 transition-colors duration-300 border-b-2 border-transparent hover:border-pink-400"
         >
           Pricing

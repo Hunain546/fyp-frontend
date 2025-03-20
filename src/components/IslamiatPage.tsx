@@ -238,12 +238,22 @@ const FeaturesSection: React.FC = () => {
 // Islamiat Page Component
 interface IslamiatPageProps {
   onBack: () => void;
+  onLogin?: () => void;
+  onSignup?: () => void;
 }
 
-const IslamiatPage: React.FC<IslamiatPageProps> = ({ onBack }) => {
+const IslamiatPage: React.FC<IslamiatPageProps> = ({
+  onBack,
+  onLogin,
+  onSignup,
+}) => {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
+      <Navbar
+        onLogin={onLogin || (() => {})}
+        onSignup={onSignup || (() => {})}
+        onSubjectSelect={(subject) => {}}
+      />
       <HeroSection onBack={onBack} />
       <CourseSection />
       <VideoLessonSection />
