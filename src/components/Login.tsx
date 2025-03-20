@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
 interface LoginProps {
-  onLogin: (email: string, password: string) => void;
+  onLogin: (email: string, password: string) => Promise<void>; // Updated to Promise
   onSignupClick: () => void;
-  onGoogleLogin?: () => void; // Add Google login handler prop
-  onCancel: () => void; // Add this prop
+  onGoogleLogin?: () => void;
+  onCancel: () => void;
 }
 
 const Login: React.FC<LoginProps> = ({
@@ -16,10 +16,21 @@ const Login: React.FC<LoginProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [darkMode, setDarkMode] = useState(false);
+  const [loading, setLoading] = useState(false); // Add loading state
+  const [error, setError] = useState<string | null>(null); // Add error state
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    onLogin(email, password);
+    setError(null);
+    try {
+      setLoading(true);
+      await onLogin(email, password);
+    } catch (err: any) {
+      setError(err?.message || "Login failed. Please check your credentials.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
@@ -52,6 +63,14 @@ const Login: React.FC<LoginProps> = ({
             <p className="text-sm text-gray-500 dark:text-gray-300 text-center mb-6">
               Welcome back! Please enter your credentials to continue.
             </p>
+
+            {/* Error message */}
+            {error && (
+              <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                {error}
+              </div>
+            )}
+
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
                 <label
@@ -91,15 +110,43 @@ const Login: React.FC<LoginProps> = ({
                 <button
                   type="button"
                   onClick={onCancel}
-                  className="text-gray-600 hover:text-gray-800"
+                  disabled={loading}
+                  className="text-gray-600 hover:text-gray-800 disabled:opacity-50"
                 >
                   ← Back to home
                 </button>
                 <button
                   type="submit"
-                  className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+                  disabled={loading}
+                  className="bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 disabled:opacity-70 flex items-center"
                 >
-                  Login
+                  {loading ? (
+                    <>
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Signing in...
+                    </>
+                  ) : (
+                    "Login"
+                  )}
                 </button>
               </div>
             </form>
@@ -116,7 +163,8 @@ const Login: React.FC<LoginProps> = ({
             {/* Google Sign-in Button */}
             <button
               onClick={onGoogleLogin}
-              className="w-full flex items-center justify-center bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition duration-200"
+              disabled={loading}
+              className="w-full flex items-center justify-center bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition duration-200 disabled:opacity-50"
             >
               <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
                 <path
@@ -144,7 +192,8 @@ const Login: React.FC<LoginProps> = ({
               Don't have an account?{" "}
               <button
                 onClick={onSignupClick}
-                className="text-indigo-600 hover:underline font-medium cursor-pointer"
+                disabled={loading}
+                className="text-indigo-600 hover:underline font-medium cursor-pointer disabled:opacity-50"
               >
                 Sign up
               </button>
