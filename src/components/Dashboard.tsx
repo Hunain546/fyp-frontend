@@ -41,7 +41,7 @@ const Dashboard: React.FC<DashboardProps> = ({
   return (
     <div className="relative">
       {/* Sign Out Button */}
-      <div className="absolute top-0 right-0">
+      {/* <div className="absolute top-0 right-0">
         <button
           onClick={onSignOut}
           className="px-4 py-2 text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50 rounded-md transition-colors duration-200 flex items-center gap-1"
@@ -62,7 +62,7 @@ const Dashboard: React.FC<DashboardProps> = ({
           </svg>
           Sign Out
         </button>
-      </div>
+      </div> */}
 
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold text-gray-900">

@@ -35,8 +35,14 @@ function App() {
   const [showAuth, setShowAuth] = useState(false); // Track if user wants to auth
 
   // Use subject context
-  const { selectedSubject, setSelectedSubject, subjectHistory, updateHistory } =
-    useSubject();
+  const {
+    selectedSubject,
+    setSelectedSubject,
+    subjectHistory,
+    updateHistory,
+    clearHistory,
+    createNewChat,
+  } = useSubject();
 
   // Check for existing session when the app loads
   useEffect(() => {
@@ -58,7 +64,48 @@ function App() {
 
   const handleSelectSubject = (subject: string) => {
     setSelectedSubject(subject); // Keep the subject selected
-    setActiveSection("subjectPage"); // Redirect to the new page
+
+    // Check if subject is one of the available subjects
+    if (["Islamiat", "History", "Geography"].includes(subject)) {
+      setActiveSection("subjectPage"); // Redirect to the subject page
+    } else {
+      setActiveSection("ComingSoon"); // Redirect to coming soon page
+    }
+  };
+
+  // Update the clearChat handler
+  const handleClearChat = () => {
+    if (!selectedSubject) return;
+    clearHistory(selectedSubject);
+  };
+
+  // Add a new function to create a new chat
+  const handleNewChat = () => {
+    if (!selectedSubject) return;
+
+    // Get current messages for the selected subject
+    const currentHistory = subjectHistory.find(
+      (h) => h.subject === selectedSubject
+    );
+    const messageCount = currentHistory?.messages?.length || 0;
+
+    // Only create a new chat if there are more than 1 messages
+    if (messageCount > 1) {
+      createNewChat(selectedSubject);
+    }
+  };
+
+  // Add a handler for loading chat messages
+  const handleLoadChat = (messages: Message[]) => {
+    if (!selectedSubject) return;
+
+    // Clear current history and load the selected chat messages
+    clearHistory(selectedSubject);
+
+    // Add each message from the loaded chat to the current history
+    messages.forEach((message) => {
+      updateHistory(selectedSubject, message);
+    });
   };
 
   // Subject list
@@ -100,6 +147,7 @@ function App() {
     if (section === "dashboard") {
       setSelectedSubject(null);
     } else if (subjects.some((s) => s.subject === section)) {
+      console.log("Selected subject:", section);
       setSelectedSubject(section);
     }
     setActiveSection(section);
@@ -246,17 +294,6 @@ function App() {
     setShowAuth(false);
   };
 
-  // Add clear chat handler: clears messages for selected subject.
-  const handleClearChat = () => {
-    if (!selectedSubject) return;
-    const newHistory = subjectHistory.map((h) =>
-      h.subject === selectedSubject ? { ...h, messages: [] } : h
-    );
-    localStorage.setItem("subjectHistory", JSON.stringify(newHistory));
-    // Force UI update; adjust if you later expose a setter in context.
-    window.location.reload();
-  };
-
   // Sign out handler
   const handleSignOut = async () => {
     try {
@@ -299,6 +336,8 @@ function App() {
               onSendMessage={handleSendMessage}
               onCloseChat={() => setActiveSection("subjectPage")}
               onClearChat={handleClearChat} // Added onClearChat prop here
+              onNewChat={handleNewChat}
+              onLoadChat={handleLoadChat} // Pass the handler to load chat history
             />
           )
         );
@@ -340,6 +379,59 @@ function App() {
             />
           )
         );
+
+      case "Islamiat":
+        return (
+          selectedSubject && (
+            <SubjectDetails
+              subject={selectedSubject}
+              onProceed={() => setActiveSection("practice")}
+              onNavigate={handleNavigate} // Pass handleNavigate
+            />
+          )
+        );
+
+      case "History":
+        return (
+          selectedSubject && (
+            <SubjectDetails
+              subject={selectedSubject}
+              onProceed={() => setActiveSection("practice")}
+              onNavigate={handleNavigate} // Pass handleNavigate
+            />
+          )
+        );
+      case "Geography":
+        return (
+          selectedSubject && (
+            <SubjectDetails
+              subject={selectedSubject}
+              onProceed={() => setActiveSection("practice")}
+              onNavigate={handleNavigate} // Pass handleNavigate
+            />
+          )
+        );
+
+      case "ComingSoon":
+        return (
+          <div className="flex flex-col items-center justify-center h-full py-20">
+            <div className="text-6xl mb-8">🚧</div>
+            <h2 className="text-3xl font-bold text-indigo-700 mb-4">
+              Coming Soon
+            </h2>
+            <p className="text-xl text-gray-600 text-center max-w-lg">
+              We're working hard to bring {selectedSubject} content to our
+              platform. Check back soon for exciting new learning resources!
+            </p>
+            <button
+              onClick={() => setActiveSection("dashboard")}
+              className="mt-8 px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none"
+            >
+              Return to Dashboard
+            </button>
+          </div>
+        );
+
       default:
         return <FeedbackPage />;
     }
@@ -394,6 +486,7 @@ function App() {
           activeSection={activeSection}
           onNavigate={handleNavigate}
           selectedSubject={selectedSubject}
+          onSignOut={handleSignOut}
         />
         <div className="flex-1 flex flex-col">
           <div className="flex-1 p-8 overflow-y-auto">
@@ -402,8 +495,7 @@ function App() {
         </div>
       </div>
 
-      {/* Footer Section */}
-      <footer className="bg-indigo-600 text-white py-6 text-center">
+      {/* <footer className="bg-indigo-600 text-white py-6 text-center">
         <p className="text-sm">
           &copy; {new Date().getFullYear()} O/Adapt. All rights reserved.
         </p>
@@ -420,7 +512,7 @@ function App() {
             Contact Us
           </a>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 }

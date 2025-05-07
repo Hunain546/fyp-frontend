@@ -152,15 +152,15 @@ const Login: React.FC<LoginProps> = ({
             </form>
 
             {/* Divider */}
-            <div className="flex items-center my-4">
+            {/* <div className="flex items-center my-4">
               <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
               <span className="px-2 text-sm text-gray-500 dark:text-gray-400">
                 OR
               </span>
               <div className="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-            </div>
+            </div> */}
 
-            {/* Google Sign-in Button */}
+            {/* Google Sign-in Button
             <button
               onClick={onGoogleLogin}
               disabled={loading}
@@ -186,7 +186,7 @@ const Login: React.FC<LoginProps> = ({
                 <path fill="none" d="M1 1h22v22H1z" />
               </svg>
               Sign in with Google
-            </button>
+            </button> */}
 
             <p className="text-sm text-gray-500 dark:text-gray-300 text-center mt-4">
               Don't have an account?{" "}

@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   Edit3,
   User,
+  LogOut,
 } from "lucide-react";
 import { getUser } from "../auth";
 
@@ -18,12 +19,14 @@ interface SidebarProps {
   activeSection: string;
   onNavigate: (section: string) => void;
   selectedSubject: string | null;
+  onSignOut?: () => void; // Optional prop for handling sign out
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
   activeSection,
   onNavigate,
   selectedSubject,
+  onSignOut,
 }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [user, setUser] = useState<any>(null);
@@ -48,7 +51,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     { icon: Home, label: "Dashboard", id: "dashboard" },
     { icon: Star, label: "Progress", id: "progress" },
     { icon: Settings, label: "Settings", id: "settings" },
-    { icon: Edit3, label: "Feedback", id: "feedback" },
   ];
 
   const subjectMenuItems = [
@@ -193,6 +195,21 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
         ))}
       </nav>
+
+      {/* Sign Out Button - pushed to bottom with mt-auto */}
+      <div className="mt-auto pt-4">
+        <button
+          onClick={onSignOut}
+          className={`flex items-center ${
+            isExpanded ? "gap-3" : "justify-center"
+          } w-full p-3 rounded-lg transition-transform transform hover:bg-indigo-800/50 text-white/80 hover:scale-105`}
+        >
+          <LogOut className="w-6 h-6" />
+          {isExpanded && (
+            <span className="transition-opacity duration-300">Sign Out</span>
+          )}
+        </button>
+      </div>
     </div>
   );
 };

@@ -164,7 +164,7 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
               onChange={(e) => setQuestion(e.target.value)}
               className="w-full border border-gray-300 p-3 rounded-md focus:ring-2 focus:ring-blue-500 text-lg"
             />
-            <select
+            {/* <select
               value={style}
               onChange={(e) => setStyle(e.target.value)}
               className="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 text-lg"
@@ -172,7 +172,7 @@ export default function PastPaperAI({ subject, onBack }: PastPaperAIProps) {
               <option value="concise">Concise</option>
               <option value="detailed">Detailed</option>
               <option value="explanatory">Explanatory</option>
-            </select>
+            </select> */}
           </>
         )}
 
